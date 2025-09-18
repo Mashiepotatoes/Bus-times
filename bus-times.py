@@ -3,17 +3,27 @@ import json # for formatting json object
 from rich import print_json # for colourising json output
 from tabulate import tabulate # for formatting tables
 from datetime import datetime # for handling date and time
+from sys import argv
 
+    # The program from CLI should take two arguments, this file, and a txt file with the API key. 
     # loop through all the services
     # for each service, loop through all the next buses
     # for each bus, get the eta and calculate the difference between now and eta
     # use tabulate to put the data in a table
 
+API_KEY = None
+
 def main():
     bus_stop = input("Enter bus stop code: ")
-    buses = get_json()
+    buses = get_json(bus_stop)
 
-def get_json():
+def get_json(bus_stop):
+    try:
+        with open("API-KEY.txt") as f:
+            API_KEY = f.read()
+    except FileNotFoundError:
+        print("File not found!")
+        
     API_KEY = "qfJiF6MVSTilUYq/UBiPxQ=="
     api_url = "https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode="
     headers = {
