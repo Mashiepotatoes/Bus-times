@@ -4,6 +4,7 @@ from rich import print_json # for colourising json output
 from tabulate import tabulate # for formatting tables
 from datetime import datetime # for handling date and time
 from sys import argv
+import argparse
 
     # The program from CLI should take two arguments, this file, and a txt file with the API key. 
     # loop through all the services
@@ -14,6 +15,17 @@ from sys import argv
 API_KEY = None
 
 def main():
+    # Handle wrong number of arguments
+    parser = argparse.ArgumentParser(description="Requires exactly two positional args")
+    parser.add_argument(
+        "items",
+        nargs=1, # require exactly 2 values
+        help="One additional argument after script, e.g. <python-script.py> api_key.txt "
+    )
+    parser.parse_args()
+    
+    # Handle wrong file type
+
     bus_stop = input("Enter bus stop code: ")
     buses = get_json(bus_stop)
 
