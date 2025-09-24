@@ -2,7 +2,7 @@ import requests # for http requests
 import json # for formatting json object
 from rich import print_json # for colourising json output
 from tabulate import tabulate # for formatting tables
-from datetime import datetime # for handling date and time
+from datetime import datetime, timezone # for handling date and time
 from sys import argv
 import argparse
 
@@ -11,6 +11,7 @@ import argparse
     # for each service, loop through all the next buses
     # for each bus, get the eta and calculate the difference between now and eta
     # use tabulate to put the data in a table
+NOW_UTC = datetime.now(timezone.utc)    
 
 def main():
     # Handle wrong number of arguments
@@ -26,6 +27,7 @@ def main():
 
     bus_stop = input("Enter bus stop code: ")
     buses = get_json(bus_stop)
+    print(print_results(buses, bus_stop))
 
 def get_json(bus_stop):
     try:
@@ -45,6 +47,23 @@ def get_json(bus_stop):
     return obj["Services"] # this is an array of dicts of buses
     # print(json.dumps(obj, indent=4))
 
+def print_results(buses, bus_stop):
+    headers = [f"Bus Stop: {bus_stop}", "First Bus", "Second Bus", "Third Bus"]
+    table = []             
 
+    for bus in buses:
+        bus_num = bus["ServiceNo"]
+        # finding the difference between the ETA provided and the current time                  
+        b1 = get_eta(bus["NextBus"]["EstimatedArrival"])
+        b2 = get_eta(bus["NextBus2"]["EstimatedArrival"])
+        b3  = get_eta(bus["NextBus3"]["EstimatedArrival"])
+        table.append([bus_num, b1, b2, b3])
+        
+    return tabulate(table, headers, tablefmt="heavy_outline")
+
+def get_eta(bus_eta):
+    target_time = datetime.fromisoformat(bus_eta)
+    min_diff = (target_time - NOW_UTC).total_seconds() / 60
+    return round(min_diff)
 
 main()
