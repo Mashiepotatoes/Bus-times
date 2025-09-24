@@ -12,8 +12,6 @@ import argparse
     # for each bus, get the eta and calculate the difference between now and eta
     # use tabulate to put the data in a table
 
-API_KEY = None
-
 def main():
     # Handle wrong number of arguments
     parser = argparse.ArgumentParser(description="Requires exactly two positional args")
@@ -36,7 +34,6 @@ def get_json(bus_stop):
     except FileNotFoundError:
         print("File not found!")
         
-    API_KEY = "qfJiF6MVSTilUYq/UBiPxQ=="
     api_url = "https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode="
     headers = {
         "AccountKey": API_KEY,
