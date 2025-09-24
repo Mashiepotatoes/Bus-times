@@ -6,11 +6,6 @@ from datetime import datetime, timezone # for handling date and time
 from sys import argv, exit
 import argparse
 
-    # The program from CLI should take two arguments, this file, and a txt file with the API key. 
-    # loop through all the services
-    # for each service, loop through all the next buses
-    # for each bus, get the eta and calculate the difference between now and eta
-    # use tabulate to put the data in a table
 NOW_UTC = datetime.now(timezone.utc)    
 
 def main():
