@@ -27,7 +27,8 @@ def main():
 
     bus_stop = input("Enter bus stop code: ")
     buses = get_json(bus_stop)
-    print(print_results(buses, bus_stop))
+    print(f"RETRIEVING RESULTS FOR BUS STOP NO.: {bus_stop}")
+    print(waiting_time_table(buses))
 
 def get_json(bus_stop):
     try:
@@ -47,8 +48,8 @@ def get_json(bus_stop):
     return obj["Services"] # this is an array of dicts of buses
     # print(json.dumps(obj, indent=4))
 
-def print_results(buses, bus_stop):
-    headers = [f"Bus Stop: {bus_stop}", "First Bus", "Second Bus", "Third Bus"]
+def waiting_time_table(buses):
+    headers = [f"Bus Number", "First Bus", "Second Bus", "Third Bus"]
     table = []             
 
     for bus in buses:
@@ -62,6 +63,8 @@ def print_results(buses, bus_stop):
     return tabulate(table, headers, tablefmt="heavy_outline")
 
 def get_eta(bus_eta):
+    if bus_eta == '':
+        return "-"
     target_time = datetime.fromisoformat(bus_eta)
     min_diff = (target_time - NOW_UTC).total_seconds() / 60
     return round(min_diff)
