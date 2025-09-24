@@ -3,7 +3,7 @@ import json # for formatting json object
 from rich import print_json # for colourising json output
 from tabulate import tabulate # for formatting tables
 from datetime import datetime, timezone # for handling date and time
-from sys import argv
+from sys import argv, exit
 import argparse
 
     # The program from CLI should take two arguments, this file, and a txt file with the API key. 
@@ -24,7 +24,11 @@ def main():
     parser.parse_args()
     
     # Handle wrong file type
+    api_file = argv[1]
+    if not api_file.endswith(".txt"):
+        exit("ERROR: File containing API KEY should be in .txt format")
 
+    # Main function
     bus_stop = input("Enter bus stop code: ")
     buses = get_json(bus_stop)
     print(f"RETRIEVING RESULTS FOR BUS STOP NO.: {bus_stop}")
